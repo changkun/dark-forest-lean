@@ -10,19 +10,22 @@ universe is not something a proof assistant can settle.
 Every theorem depends only on Lean's standard axioms (`propext`,
 `Classical.choice`, `Quot.sound`); none uses `sorry`.
 
-Not checked: the informal cases of Proposition 0; for priors other than
-uniform, that beliefs come within `η` of the uniform prior's as the noise
-shrinks, the last step of Carlsson and van Damme (1993), which
-`global_game` takes as its hypothesis; and the long-run selection result of
-Kandori, Mailath and Rob (1993), which the essay cites alongside the
-replicator theorems.
+Where the essay cites a general theorem, the file checks the case this model
+needs, not the theorem itself: equilibrium selection in global games
+(Carlsson and van Damme, 1993) for this game rather than every two-by-two
+game; long-run selection under mutations (Kandori, Mailath and Rob, 1993)
+for best-reply dynamics rather than their whole class; and cooperation in
+repeated play for grim trigger rather than the Folk theorem.
 
 | Claim in the essay | Theorem |
 |---|---|
 | Axiom A1: with survival taking two values, the lexicographic order has a real-valued utility | `lex_representable` |
 | ... unlike the lexicographic order on pairs of reals, which has none | `lex_real_not_representable` |
 | Axiom A1: the additive utility respects the order if other gains are bounded and `M` exceeds twice the bound, and fails for every finite `M` if they are not | `additive_lex_of_bounded`, `additive_not_lex_of_unbounded` |
+| Proposition 0 (a): once goodwill is verified, waiting is strictly better than striking, and with no hostile share revealing beats hiding | `prop0_verified`, `prop0_verified_reveal` |
+| Proposition 0 (b): an enforcer that destroys violators with probability at least `q²` makes waiting strictly better whatever the other side does | `prop0_enforced` |
 | Proposition 0 (c): a strike that never succeeds is strictly worse than waiting | `prop0_no_preemption_when_strikes_fail` |
+| Proposition 0 (d): against grim trigger, restraint is a best reply iff `δ ≥ (g - w)/(g - p)`, a threshold below 1; with delay `τ` and discount rate `r`, iff `rτ ≤ log((g - p)/(g - w))` | `grim_sustains`, `restraint_pay`, `grim_threshold_lt_one`, `grim_delay` |
 | Section 4.2: the base threat `π = 1 - (1 - p)(1 - γ)` is a probability, positive whenever `γ` is | `basePi_pos` |
 | Proposition 1: under B2 the threat believed after any signal is the prior, strictly between 0 and 1 | `prop1_posterior_is_prior`, `prop1_cheap_talk` |
 | Proposition 2: the original recurrence has closed form `1 - (1 - π)^(n+1)` and tends to 1 | `linearChain_closed`, `linearChain_tendsto_one` |
@@ -38,11 +41,15 @@ replicator theorems.
 | Proposition 3, global game: under a uniform prior on an interval, a signal away from its ends carries no information about the noises, so the belief and the posterior mean are the flat prior's | `interior_signal`, `belief_is_conditional`, `posterior_is_signal_minus_noise`, `posterior_mean` |
 | Proposition 3, global game: under that prior, with noise of mean zero bounded by `σ`, selection holds at every noise level once the prior extends `2σ` into both dominance regions | `uniform_prior_selects` |
 | Proposition 3, global game: beliefs within `η` of the uniform prior's move the switch by at most `(2 - π)η` | `global_game` |
+| Proposition 3, global game: under a prior with a density, Bayes' rule gives the posterior law of the noises given one's signal | `joint_law_density`, `signal_law_density`, `conditional_of_density` |
+| Proposition 3, global game: if the density is at least `m` and `L`-Lipschitz, beliefs stay within `max(σ, 2Lσ/(m - Lσ))` of the flat prior's, and the switch closes on `(1 - π)/2` as the noise shrinks, whatever its law | `post_near`, `post_mean_near`, `smooth_prior_selects`, `smooth_prior_limit` |
 | Proposition 4: hiding beats revealing iff `(λR - λH)(ρD - ρ0)M > B + C` | `prop4_hide_iff` |
 | Proposition 4: detection is dangerous as soon as any hostile share exists, and a large `M` then makes hiding better | `rhoD_pos`, `silence_for_large_M` |
 | Theorem, system level: under the replicator dynamics, the share that broadcasts tends to 0 whenever hiding is fitter | `repShare_closed`, `silence_spreads` |
 | Theorem, system level: striking is bistable, taking over above an edge and dying out below it | `striking_takes_over`, `striking_dies_out` |
 | Theorem, system level: striking has the larger basin exactly when it is risk-dominant | `larger_basin_iff_risk_dominant` |
+| Theorem, system level: under best replies with mutation rate `ε`, every stationary distribution gives striking the share `α/(α + β)` of the two tipping chances, and one exists | `kmr_stationary`, `kmr_exists_stationary` |
+| Theorem, system level: as mutations become rare, a large population spends almost all its time striking if striking is risk-dominant, and almost none if restraint is | `kmr_limit`, `kmr_limit_zero`, `kmr_selects_risk_dominant`, `kmr_selects_restraint` |
 
 ## Checking it
 
