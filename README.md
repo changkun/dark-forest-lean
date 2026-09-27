@@ -1,6 +1,6 @@
 # dark-forest-lean
 
-Machine-checked propositions for the essay
+Machine-checked claims for the essay
 [Dark Forest Theory: A Formal Derivation](https://changkun.de/blog/posts/dark-forest-theory/).
 
 What is checked is the mathematics of the model: its utilities, thresholds,
@@ -10,9 +10,18 @@ universe is not something a proof assistant can settle.
 Every theorem depends only on Lean's standard axioms (`propext`,
 `Classical.choice`, `Quot.sound`); none uses `sorry`.
 
+Not checked, because they are not statements this file can prove: the
+informal cases of Proposition 0, the equilibrium-selection result of
+Carlsson and van Damme (1993) cited in Proposition 3, and the evolutionary
+clause of the main theorem, which the essay tests by simulation.
+
 | Claim in the essay | Theorem |
 |---|---|
+| Axiom A1: with survival taking two values, the lexicographic order has a real-valued utility | `lex_representable` |
+| Axiom A1: the additive utility respects the order if other gains are bounded and `M` exceeds twice the bound, and fails for every finite `M` if they are not | `additive_lex_of_bounded`, `additive_not_lex_of_unbounded` |
 | Proposition 0 (c): a strike that never succeeds is strictly worse than waiting | `prop0_no_preemption_when_strikes_fail` |
+| Section 4.2: the base threat `π = 1 - (1 - p)(1 - γ)` is a probability, positive whenever `γ` is | `basePi_pos` |
+| Proposition 1: under B2 the threat believed after any signal is the prior, strictly between 0 and 1 | `prop1_posterior_is_prior`, `prop1_cheap_talk` |
 | Proposition 2: the original recurrence has closed form `1 - (1 - π)^(n+1)` and tends to 1 | `linearChain_closed`, `linearChain_tendsto_one` |
 | Proposition 2: that recurrence is the case of thresholds spread uniformly over `[0, 1]` | `linear_is_uniform` |
 | Proposition 2: identical civilizations, the chain stops at `π` or reaches 1 in one step | `chain_stops`, `chain_unravels` |
