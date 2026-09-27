@@ -10,12 +10,22 @@ universe is not something a proof assistant can settle.
 Every theorem depends only on Lean's standard axioms (`propext`,
 `Classical.choice`, `Quot.sound`); none uses `sorry`.
 
-Where the essay cites a general theorem, the file checks the case this model
-needs, not the theorem itself: equilibrium selection in global games
-(Carlsson and van Damme, 1993) for this game rather than every two-by-two
-game; long-run selection under mutations (Kandori, Mailath and Rob, 1993)
-for best-reply dynamics rather than their whole class; and cooperation in
-repeated play for grim trigger rather than the Folk theorem.
+What the proofs do not settle is set out in Section 8.7 of the essay. In
+short:
+
+- Beyond any proof: whether the axioms describe any universe; whether each
+  Lean statement says what the essay's sentence says (check this by reading
+  the statements); the modelling choices built in, such as counting a
+  capable civilization as a willing one, two civilizations only, and A2
+  never entering the model; the simulation of Section 9; the analogies of
+  Section 7.
+- Not proved here, though they could be: the general theorems cited, of
+  which the file checks the case this model needs (Carlsson and van Damme,
+  1993, for this game; Kandori, Mailath and Rob, 1993, for best-reply
+  dynamics; grim trigger rather than the Folk theorem); that B1-B5 are
+  minimal or independent; that the noisy game has an equilibrium under a
+  proper prior; the informal arguments on costly signals and on many
+  civilizations.
 
 | Claim in the essay | Theorem |
 |---|---|
@@ -27,6 +37,8 @@ repeated play for grim trigger rather than the Folk theorem.
 | Proposition 0 (c): a strike that never succeeds is strictly worse than waiting | `prop0_no_preemption_when_strikes_fail` |
 | Proposition 0 (d): against grim trigger, restraint is a best reply iff `δ ≥ (g - w)/(g - p)`, a threshold below 1; with delay `τ` and discount rate `r`, iff `rτ ≤ log((g - p)/(g - w))` | `grim_sustains`, `restraint_pay`, `grim_threshold_lt_one`, `grim_delay` |
 | Section 4.2: the base threat `π = 1 - (1 - p)(1 - γ)` is a probability, positive whenever `γ` is | `basePi_pos` |
+| B4 and Section 4.2: with a Gaussian random term every capability level is reached with positive probability, so `γ > 0`; a bounded random term need not reach it | `explosion_possible`, `explosion_needs_reach` |
+| Section 8.2: with a random term of mean zero, `γ ≤ σ²/c²`, and the base threat lies between `p` and `p + γ` | `explosion_rare`, `basePi_between` |
 | Proposition 1: under B2 the threat believed after any signal is the prior, strictly between 0 and 1 | `prop1_posterior_is_prior`, `prop1_cheap_talk` |
 | Proposition 2: the original recurrence has closed form `1 - (1 - π)^(n+1)` and tends to 1 | `linearChain_closed`, `linearChain_tendsto_one` |
 | Proposition 2: that recurrence is the case of thresholds spread uniformly over `[0, 1]` | `linear_is_uniform` |
@@ -35,6 +47,7 @@ repeated play for grim trigger rather than the Folk theorem.
 | Proposition 3: striking first beats waiting iff `r > 1 - q + K/(qM)` | `prop3_threshold` |
 | Proposition 3: as `M` grows, the threshold falls to `1 - q`, not to 0 | `threshold_tendsto` |
 | Proposition 3: mutual restraint and mutual striking as equilibria | `wait_equilibrium_iff`, `strike_equilibrium_iff` |
+| Proposition 3 and the Theorem: mutual striking is an equilibrium iff `K < q²M`, the only one when `π > r*`, and below that there are exactly the three equilibria of a stag hunt | `threshold_lt_one_iff`, `only_striking`, `stag_hunt_equilibria` |
 | Proposition 3: striking is risk-dominant iff `q > (1 - π)/2` | `strike_risk_dominant_iff`, `strike_risk_dominant_iff_q` |
 | Proposition 3, global game: with a noisy signal of `q` and a flat prior, in every equilibrium, symmetric or not, both sides strike above `(1 - π)/2` and wait below it, and the threshold strategy is an equilibrium | `global_game_pair`, `global_game_unique`, `threshold_is_equilibrium`, `selected_is_risk_dominant` |
 | Proposition 3, global game: two i.i.d. noises that do not tie are each as likely to be the larger, and any atomless noise law gives the beliefs the argument needs | `noise_half`, `flatNoise` |
@@ -45,6 +58,8 @@ repeated play for grim trigger rather than the Folk theorem.
 | Proposition 3, global game: if the density is at least `m` and `L`-Lipschitz, beliefs stay within `max(σ, 2Lσ/(m - Lσ))` of the flat prior's, and the switch closes on `(1 - π)/2` as the noise shrinks, whatever its law | `post_near`, `post_mean_near`, `smooth_prior_selects`, `smooth_prior_limit` |
 | Proposition 4: hiding beats revealing iff `(λR - λH)(ρD - ρ0)M > B + C` | `prop4_hide_iff` |
 | Proposition 4: detection is dangerous as soon as any hostile share exists, and a large `M` then makes hiding better | `rhoD_pos`, `silence_for_large_M` |
+| Theorem, backward induction: one `M` makes hiding better whichever equilibrium follows detection | `silence_whatever_follows` |
+| Theorem: for identical civilizations, the Dark Forest state holds for all large `M` iff `q > (1 - π)/2` | `dark_forest_state_iff` |
 | Theorem, system level: under the replicator dynamics, the share that broadcasts tends to 0 whenever hiding is fitter | `repShare_closed`, `silence_spreads` |
 | Theorem, system level: striking is bistable, taking over above an edge and dying out below it | `striking_takes_over`, `striking_dies_out` |
 | Theorem, system level: striking has the larger basin exactly when it is risk-dominant | `larger_basin_iff_risk_dominant` |
