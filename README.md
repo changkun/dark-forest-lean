@@ -10,14 +10,19 @@ universe is not something a proof assistant can settle.
 Every theorem depends only on Lean's standard axioms (`propext`,
 `Classical.choice`, `Quot.sound`); none uses `sorry`.
 
-Not checked, because they are not statements this file can prove: the
-informal cases of Proposition 0, the equilibrium-selection result of
-Carlsson and van Damme (1993) cited in Proposition 3, and the evolutionary
-clause of the main theorem, which the essay tests by simulation.
+Not checked: the informal cases of Proposition 0; the general
+equilibrium-selection theorem of Carlsson and van Damme (1993), for
+asymmetric equilibria and other priors, of which the file checks the
+symmetric, uniform-prior version for this game (the step from a uniform
+prior to the one-half belief is assumed, and the underlying fact about
+i.i.d. noise is proved); and the long-run selection result of Kandori,
+Mailath and Rob (1993), which the essay cites alongside the replicator
+theorems.
 
 | Claim in the essay | Theorem |
 |---|---|
 | Axiom A1: with survival taking two values, the lexicographic order has a real-valued utility | `lex_representable` |
+| ... unlike the lexicographic order on pairs of reals, which has none | `lex_real_not_representable` |
 | Axiom A1: the additive utility respects the order if other gains are bounded and `M` exceeds twice the bound, and fails for every finite `M` if they are not | `additive_lex_of_bounded`, `additive_not_lex_of_unbounded` |
 | Proposition 0 (c): a strike that never succeeds is strictly worse than waiting | `prop0_no_preemption_when_strikes_fail` |
 | Section 4.2: the base threat `π = 1 - (1 - p)(1 - γ)` is a probability, positive whenever `γ` is | `basePi_pos` |
@@ -30,8 +35,13 @@ clause of the main theorem, which the essay tests by simulation.
 | Proposition 3: as `M` grows, the threshold falls to `1 - q`, not to 0 | `threshold_tendsto` |
 | Proposition 3: mutual restraint and mutual striking as equilibria | `wait_equilibrium_iff`, `strike_equilibrium_iff` |
 | Proposition 3: striking is risk-dominant iff `q > (1 - π)/2` | `strike_risk_dominant_iff`, `strike_risk_dominant_iff_q` |
+| Proposition 3, global game: with a noisy signal of `q`, every symmetric equilibrium strikes exactly above `(1 - π)/2`, and that threshold is an equilibrium | `global_game_unique`, `threshold_is_equilibrium`, `selected_is_risk_dominant` |
+| Proposition 3, global game: two i.i.d. noises that do not tie are each as likely to be the larger, the one-half belief at the threshold | `noise_half` |
 | Proposition 4: hiding beats revealing iff `(λR - λH)(ρD - ρ0)M > B + C` | `prop4_hide_iff` |
 | Proposition 4: detection is dangerous as soon as any hostile share exists, and a large `M` then makes hiding better | `rhoD_pos`, `silence_for_large_M` |
+| Theorem, system level: under the replicator dynamics, the share that broadcasts tends to 0 whenever hiding is fitter | `repShare_closed`, `silence_spreads` |
+| Theorem, system level: striking is bistable, taking over above an edge and dying out below it | `striking_takes_over`, `striking_dies_out` |
+| Theorem, system level: striking has the larger basin exactly when it is risk-dominant | `larger_basin_iff_risk_dominant` |
 
 ## Checking it
 
