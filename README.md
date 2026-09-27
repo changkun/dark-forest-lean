@@ -16,16 +16,20 @@ short:
 - Beyond any proof: whether the axioms describe any universe; whether each
   Lean statement says what the essay's sentence says (check this by reading
   the statements); the modelling choices built in, such as counting a
-  capable civilization as a willing one, two civilizations only, and A2
-  never entering the model; the simulation of Section 9; the analogies of
+  capable civilization as a willing one, two civilizations in the main
+  argument, and A2 never entering the model; whether informal conditions
+  are logically independent; the simulation of Section 9; the analogies of
   Section 7.
-- Not proved here, though they could be: the general theorems cited, of
-  which the file checks the case this model needs (Carlsson and van Damme,
-  1993, for this game; Kandori, Mailath and Rob, 1993, for best-reply
-  dynamics; grim trigger rather than the Folk theorem); that B1-B5 are
-  minimal or independent; that the noisy game has an equilibrium under a
-  proper prior; the informal arguments on costly signals and on many
-  civilizations.
+- Not proved here, though they could be: the parts of the cited theorems
+  beyond the classes checked. The file proves Carlsson and van Damme (1993)
+  for every two-by-two coordination game in which the state shifts a side's
+  gain by the same amount whatever the other does, but not for games where
+  the state changes the complementarity, nor for asymmetric payoffs under
+  priors other than flat. It proves Kandori, Mailath and Rob (1993) for
+  simultaneous and one-at-a-time best reply, but not for their whole class
+  of dynamics, which needs the Markov chain tree theorem. It proves
+  Friedman's folk theorem, but not the minmax version of Fudenberg and
+  Maskin.
 
 | Claim in the essay | Theorem |
 |---|---|
@@ -35,7 +39,8 @@ short:
 | Proposition 0 (a): once goodwill is verified, waiting is strictly better than striking, and with no hostile share revealing beats hiding | `prop0_verified`, `prop0_verified_reveal` |
 | Proposition 0 (b): an enforcer that destroys violators with probability at least `q²` makes waiting strictly better whatever the other side does | `prop0_enforced` |
 | Proposition 0 (c): a strike that never succeeds is strictly worse than waiting | `prop0_no_preemption_when_strikes_fail` |
-| Proposition 0 (d): against grim trigger, restraint is a best reply iff `δ ≥ (g - w)/(g - p)`, a threshold below 1; with delay `τ` and discount rate `r`, iff `rτ ≤ log((g - p)/(g - w))` | `grim_sustains`, `restraint_pay`, `grim_threshold_lt_one`, `grim_delay` |
+| Proposition 0 (d), Friedman's folk theorem: in any finite game, reverting to a stage Nash equilibrium sustains any pure profile that pays everyone more, as a subgame-perfect equilibrium, once players are patient enough; the two-action game is a case | `folk_nash_reversion`, `folk_subgame_perfect`, `folk_patient`, `twoAction_folk` |
+| Section 3: each of B1–B5, dropped alone, admits a case where a conclusion fails | `each_condition_used` |
 | Section 4.2: the base threat `π = 1 - (1 - p)(1 - γ)` is a probability, positive whenever `γ` is | `basePi_pos` |
 | B4 and Section 4.2: with a Gaussian random term every capability level is reached with positive probability, so `γ > 0`; a bounded random term need not reach it | `explosion_possible`, `explosion_needs_reach` |
 | Section 8.2: with a random term of mean zero, `γ ≤ σ²/c²`, and the base threat lies between `p` and `p + γ` | `explosion_rare`, `basePi_between` |
@@ -54,7 +59,12 @@ short:
 | Proposition 3, global game: under a uniform prior on an interval, a signal away from its ends carries no information about the noises, so the belief and the posterior mean are the flat prior's | `interior_signal`, `belief_is_conditional`, `posterior_is_signal_minus_noise`, `posterior_mean` |
 | Proposition 3, global game: under that prior, with noise of mean zero bounded by `σ`, selection holds at every noise level once the prior extends `2σ` into both dominance regions | `uniform_prior_selects` |
 | Proposition 3, global game: beliefs within `η` of the uniform prior's move the switch by at most `(2 - π)η` | `global_game` |
+| Proposition 3, global game: every pair of views, for any prior and any beliefs near its edges, has an equilibrium (Knaster–Tarski) | `equilibrium_exists` |
 | Proposition 3, global game: under a prior with a density, Bayes' rule gives the posterior law of the noises given one's signal | `joint_law_density`, `signal_law_density`, `conditional_of_density` |
+| Carlsson and van Damme, state-additive two-by-two coordination games: with the same payoffs, every equilibrium switches at the risk-dominance boundary at every noise level | `cvd_symmetric`, `cvd_threshold_is_equilibrium`, `cvd_risk_dominant`, `cvd_dark_forest` |
+| ... with different payoffs, both sides switch within `2σ` of the point where the indifference probabilities sum to one, which is Harsanyi and Selten's risk-dominance boundary | `cvd_flatG_symm`, `cvd_asymmetric_flat`, `cvd_asymmetric_limit`, `cvd_theta_is_risk_dominance` |
+| Section 8.1: separating on a costly signal is an equilibrium iff it costs the benign no more than trust is worth and the hostile at least as much; a signal then proves goodwill | `separating_iff`, `separating_posterior`, `separating_silence`, `pooling_posterior` |
+| Section 8.5: allies and third-party sightings make striking worse, enough allies deter it, and more civilizations strengthen silence | `uAttackAllied_anti`, `coalition_deters`, `uAttackSeen_anti`, `rhoN_mono`, `silence_strengthens` |
 | Proposition 3, global game: if the density is at least `m` and `L`-Lipschitz, beliefs stay within `max(σ, 2Lσ/(m - Lσ))` of the flat prior's, and the switch closes on `(1 - π)/2` as the noise shrinks, whatever its law | `post_near`, `post_mean_near`, `smooth_prior_selects`, `smooth_prior_limit` |
 | Proposition 4: hiding beats revealing iff `(λR - λH)(ρD - ρ0)M > B + C` | `prop4_hide_iff` |
 | Proposition 4: detection is dangerous as soon as any hostile share exists, and a large `M` then makes hiding better | `rhoD_pos`, `silence_for_large_M` |
@@ -65,6 +75,7 @@ short:
 | Theorem, system level: striking has the larger basin exactly when it is risk-dominant | `larger_basin_iff_risk_dominant` |
 | Theorem, system level: under best replies with mutation rate `ε`, every stationary distribution gives striking the share `α/(α + β)` of the two tipping chances, and one exists | `kmr_stationary`, `kmr_exists_stationary` |
 | Theorem, system level: as mutations become rare, a large population spends almost all its time striking if striking is risk-dominant, and almost none if restraint is | `kmr_limit`, `kmr_limit_zero`, `kmr_selects_risk_dominant`, `kmr_selects_restraint` |
+| Theorem, system level: with one civilization revising at a time, the stationary distribution is unique and concentrates on everyone playing the risk-dominant action | `seq_product_form`, `seq_stationary_unique`, `seq_selects_risk_dominant`, `seq_selects_restraint` |
 
 ## Checking it
 
