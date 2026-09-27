@@ -10,14 +10,12 @@ universe is not something a proof assistant can settle.
 Every theorem depends only on Lean's standard axioms (`propext`,
 `Classical.choice`, `Quot.sound`); none uses `sorry`.
 
-Not checked: the informal cases of Proposition 0; the general
-equilibrium-selection theorem of Carlsson and van Damme (1993), for
-asymmetric equilibria and other priors, of which the file checks the
-symmetric, uniform-prior version for this game (the step from a uniform
-prior to the one-half belief is assumed, and the underlying fact about
-i.i.d. noise is proved); and the long-run selection result of Kandori,
-Mailath and Rob (1993), which the essay cites alongside the replicator
-theorems.
+Not checked: the informal cases of Proposition 0; for priors other than
+uniform, that beliefs come within `η` of the uniform prior's as the noise
+shrinks, the last step of Carlsson and van Damme (1993), which
+`global_game` takes as its hypothesis; and the long-run selection result of
+Kandori, Mailath and Rob (1993), which the essay cites alongside the
+replicator theorems.
 
 | Claim in the essay | Theorem |
 |---|---|
@@ -35,8 +33,11 @@ theorems.
 | Proposition 3: as `M` grows, the threshold falls to `1 - q`, not to 0 | `threshold_tendsto` |
 | Proposition 3: mutual restraint and mutual striking as equilibria | `wait_equilibrium_iff`, `strike_equilibrium_iff` |
 | Proposition 3: striking is risk-dominant iff `q > (1 - π)/2` | `strike_risk_dominant_iff`, `strike_risk_dominant_iff_q` |
-| Proposition 3, global game: with a noisy signal of `q`, every symmetric equilibrium strikes exactly above `(1 - π)/2`, and that threshold is an equilibrium | `global_game_unique`, `threshold_is_equilibrium`, `selected_is_risk_dominant` |
-| Proposition 3, global game: two i.i.d. noises that do not tie are each as likely to be the larger, the one-half belief at the threshold | `noise_half` |
+| Proposition 3, global game: with a noisy signal of `q` and a flat prior, in every equilibrium, symmetric or not, both sides strike above `(1 - π)/2` and wait below it, and the threshold strategy is an equilibrium | `global_game_pair`, `global_game_unique`, `threshold_is_equilibrium`, `selected_is_risk_dominant` |
+| Proposition 3, global game: two i.i.d. noises that do not tie are each as likely to be the larger, and any atomless noise law gives the beliefs the argument needs | `noise_half`, `flatNoise` |
+| Proposition 3, global game: under a uniform prior on an interval, a signal away from its ends carries no information about the noises, so the belief and the posterior mean are the flat prior's | `interior_signal`, `belief_is_conditional`, `posterior_is_signal_minus_noise`, `posterior_mean` |
+| Proposition 3, global game: under that prior, with noise of mean zero bounded by `σ`, selection holds at every noise level once the prior extends `2σ` into both dominance regions | `uniform_prior_selects` |
+| Proposition 3, global game: beliefs within `η` of the uniform prior's move the switch by at most `(2 - π)η` | `global_game` |
 | Proposition 4: hiding beats revealing iff `(λR - λH)(ρD - ρ0)M > B + C` | `prop4_hide_iff` |
 | Proposition 4: detection is dangerous as soon as any hostile share exists, and a large `M` then makes hiding better | `rhoD_pos`, `silence_for_large_M` |
 | Theorem, system level: under the replicator dynamics, the share that broadcasts tends to 0 whenever hiding is fitter | `repShare_closed`, `silence_spreads` |
